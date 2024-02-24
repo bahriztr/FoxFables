@@ -22,6 +22,7 @@ namespace FoxFables.Controllers
         private Jump _jump;
         private CharacterAnimation _characterAnimation;
         private Flip _flip;
+        private OnGround _onGround;
 
 
         private void Awake()
@@ -31,6 +32,7 @@ namespace FoxFables.Controllers
             _mover = GetComponent<Mover>();
             _jump = GetComponent<Jump>();
             _flip = GetComponent<Flip>();
+            _onGround = GetComponent<OnGround>();
         }
 
         private void Update()
@@ -48,7 +50,7 @@ namespace FoxFables.Controllers
         {
             _horizontal = _input.Horizontal;
 
-            if (_input.IsJumpButtonDown)
+            if (_input.IsJumpButtonDown && _onGround.IsOnGround)
             {
                 _isJump = true;
             }
@@ -58,7 +60,7 @@ namespace FoxFables.Controllers
         {
             _mover.HorizontalMovement(_horizontal);
             _characterAnimation.MoveAnimation(_horizontal);
-            _characterAnimation.JumpAnimation(_jump.IsJumpAction);
+            _characterAnimation.JumpAnimation(_jump.IsJumpAction && !_onGround.IsOnGround);
             _flip.FlipCharacter(_horizontal);
         }
 
